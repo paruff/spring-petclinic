@@ -5,7 +5,7 @@
 
 ![codeship](https://codeship.com/projects/0ddea3e0-d3ba-0134-e4ef-426c815baba4/status?branch=master)
 
-note: the codeship command uses a local mvn
+note: the codeship command uses a local mvn install
 
 ## Running petclinic locally
 ```
