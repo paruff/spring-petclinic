@@ -5,6 +5,8 @@
 
 ![codeship](https://codeship.com/projects/0ddea3e0-d3ba-0134-e4ef-426c815baba4/status?branch=master)
 
+note: the codeship command uses a local mvn
+
 ## Running petclinic locally
 ```
 	git clone https://github.com/spring-projects/spring-petclinic.git
