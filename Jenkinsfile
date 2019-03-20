@@ -13,10 +13,8 @@ volumes: [
         stage('Get a Maven project') {
             checkout scm
             container('maven') {
-                stage('Build a Maven project') {
-                    sh 'mvn -B clean install'
-                }
-            stage('Scan components Maven project') {
+                
+                stage('Scan components Maven project') {
                     sh 'mvn -B dependency-check:check'
                 }
                 
@@ -24,6 +22,11 @@ volumes: [
                     withSonarQubeEnv {
                         sh "mvn  sonar:sonar"
                     }
+                
+                stage('Build a Maven project') {
+                    sh 'mvn -B clean install'
+                }
+            
             }
         }
 
