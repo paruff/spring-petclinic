@@ -15,7 +15,7 @@ volumes: [
             container('maven') {
                 
                 stage('Scan components Maven project') {
-                    sh 'mvn -B dependency-check:check'
+                    sh 'mvn -B -Ddownloader.quick.query.timestamp=false dependency-check:check'
                 }
                 
                 stage 'Maven Static Analysis'
