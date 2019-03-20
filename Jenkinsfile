@@ -5,7 +5,7 @@ podTemplate(label: label, containers: [
     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true)
   ],
 volumes: [
-  hostPathVolume(mountPath: '/home/maven/.m2', hostPath: '/tmp/jenkins/.m2'),
+  hostPathVolume(mountPath: '/home/jenkins/.m2', hostPath: '/tmp/jenkins/.m2'),
   hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
 ]) {
 
