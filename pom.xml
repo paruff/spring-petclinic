@@ -115,7 +115,7 @@
       <plugin>
         <groupId>org.owasp</groupId>
         <artifactId>dependency-check-maven</artifactId>
-        <version>4.0.2</version>
+        <version>5.0.0-M2</version>
       </plugin>
       <plugin>
         <groupId>org.springframework.boot</groupId>
