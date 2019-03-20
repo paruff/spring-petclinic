@@ -14,14 +14,16 @@ volumes: [
             checkout scm
             container('maven') {
                 
-                stage('Scan components Maven project') {
-                    sh 'mvn -B -Ddownloader.quick.query.timestamp=false dependency-check:check'
-                }
                 
                 stage 'Maven Static Analysis'
                     withSonarQubeEnv {
                         sh "mvn  sonar:sonar"
                     }
+//  sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target               
+//                stage('Scan components Maven project') {
+//                    sh 'mvn -B -Djavax.net.ssl.trustStore=/path/to/cacerts dependency-check:check'
+//                }
+                
                 
                 stage('Build a Maven project') {
                     sh 'mvn -B clean install'
