@@ -32,19 +32,14 @@ volumes: [
                 stage('Unit Test and coverage project') {
                     sh 'mvn -B  test'
                 }
-                                
-                stage('Package project') {
-                    sh 'mvn -B  package'
-                }
                 
-
 // TODO
 //  sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target               
 //                stage('Scan components Maven project') {
 //                    sh 'mvn -B -Djavax.net.ssl.trustStore=/path/to/cacerts dependency-check:check'
 //                }
             
-                stage 'Maven Static Analysis'
+                stage 'Package and Code Analysis'
                     withSonarQubeEnv {
                         sh "mvn package sonar:sonar"
                     }
