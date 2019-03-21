@@ -17,7 +17,7 @@ volumes: [
                 
                 stage 'Maven Static Analysis'
                     withSonarQubeEnv {
-                        sh "mvn  sonar:sonar"
+                        sh "mvn package sonar:sonar"
                     }
 // TODO
 //  sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target               
