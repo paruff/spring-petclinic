@@ -29,7 +29,7 @@ volumes: [
                     sh 'mvn -B  compile'
                 }
                 
-                stage('Test project') {
+                stage('Unit Test and coverage project') {
                     sh 'mvn -B  test'
                 }
                 post {
@@ -48,11 +48,6 @@ volumes: [
 //                stage('Scan components Maven project') {
 //                    sh 'mvn -B -Djavax.net.ssl.trustStore=/path/to/cacerts dependency-check:check'
 //                }
-                
-                
-                stage('Test coverage project') {
-                    sh 'mvn -B  install cobertura:cobertura '
-                }
             
                 stage 'Maven Static Analysis'
                     withSonarQubeEnv {
