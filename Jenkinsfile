@@ -27,7 +27,7 @@ volumes: [
                 
                 
                 stage('Build a Maven project') {
-                    sh 'mvn -B clean install'
+                    sh 'mvn -B  install'
                 }
             
             }
