@@ -58,7 +58,7 @@ volumes: [
           passwordVariable: 'DOCKER_HUB_PASSWORD']]) {
           sh """
             docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
-            docker build --build-args=target/*.jar -t paruff/petclinic:${gitCommit} .
+            docker build -t paruff/petclinic:${gitCommit} .
             docker push paruff/petclinic:${gitCommit}
             """
         }
