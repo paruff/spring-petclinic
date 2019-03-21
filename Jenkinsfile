@@ -32,6 +32,11 @@ volumes: [
                 stage('Test project') {
                     sh 'mvn -B  test'
                 }
+                post {
+                    always {
+                        junit 'target/surefire-reports/*.xml'
+                    }
+                }
                 
                 stage('Package project') {
                     sh 'mvn -B  package'
