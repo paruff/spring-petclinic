@@ -49,6 +49,10 @@ volumes: [
                         sh "mvn package sonar:sonar"
                     }
                 
+                stage('Publish test results') {
+                    junit 'target/surefire-reports/*.xml'
+                } 
+                
             }
         }
         stage('Create Docker images') {
