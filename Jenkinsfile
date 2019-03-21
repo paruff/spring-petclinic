@@ -20,12 +20,24 @@ volumes: [
         stage('Get a Maven project') {
             checkout scm
             container('maven') {
+
+                stage('Validate project') {
+                    sh 'mvn -B  validate'
+                }
                 
+                stage('Compile project') {
+                    sh 'mvn -B  compile'
+                }
                 
-                stage 'Maven Static Analysis'
-                    withSonarQubeEnv {
-                        sh "mvn package sonar:sonar"
-                    }
+                stage('Test project') {
+                    sh 'mvn -B  test'
+                }
+                
+                stage('Package project') {
+                    sh 'mvn -B  package'
+                }
+                
+
 // TODO
 //  sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target               
 //                stage('Scan components Maven project') {
@@ -33,10 +45,15 @@ volumes: [
 //                }
                 
                 
-                stage('Build a Maven project') {
-                    sh 'mvn -B  install'
+                stage('Test coverage project') {
+                    sh 'mvn -B  install cobertura:cobertura '
                 }
             
+                stage 'Maven Static Analysis'
+                    withSonarQubeEnv {
+                        sh "mvn package sonar:sonar"
+                    }
+                
             }
         }
         stage('Create Docker images') {
