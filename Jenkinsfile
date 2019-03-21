@@ -11,6 +11,12 @@ volumes: [
 ]) {
 
     node(label) {
+        def myRepo = checkout scm
+    def gitCommit = myRepo.GIT_COMMIT
+    def gitBranch = myRepo.GIT_BRANCH
+    def shortGitCommit = "${gitCommit[0..10]}"
+    def previousGitCommit = sh(script: "git rev-parse ${gitCommit}~", returnStdout: true)
+        
         stage('Get a Maven project') {
             checkout scm
             container('maven') {
@@ -41,8 +47,8 @@ volumes: [
           passwordVariable: 'DOCKER_HUB_PASSWORD']]) {
           sh """
             docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
-            docker build -t namespace/my-image:${gitCommit} .
-            docker push namespace/my-image:${gitCommit}
+            docker build -t paruff/my-image:${gitCommit} .
+            docker push paruff/my-image:${gitCommit}
             """
         }
       }
