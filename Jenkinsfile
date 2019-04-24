@@ -9,6 +9,9 @@ volumes: [
 ]) {
 
     node(label) {
+        try {
+        notifySlack()
+
         def myRepo = checkout scm
     def gitCommit = myRepo.GIT_COMMIT
     def gitBranch = myRepo.GIT_BRANCH
@@ -20,7 +23,7 @@ volumes: [
             container('maven') {
 
                 stage('Validate project') {
-                    slackSend (  message: "Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>")
+#                    slackSend (  message: "Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>")
                     sh 'mvn -B  validate'
                 }
                 
@@ -64,6 +67,13 @@ volumes: [
       }
     }
 
+    }
+       // Existing build steps.
+    } catch (e) {
+        currentBuild.result = 'FAILURE'
+        throw e
+    } finally {
+        notifySlack(currentBuild.result)
     }
 }
 
