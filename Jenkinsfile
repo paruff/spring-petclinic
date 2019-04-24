@@ -47,7 +47,7 @@ volumes: [
             
                 stage ('Package and Code Analysis') {
                     withSonarQubeEnv {
-                        sh "mvn test jdepend:generate  pmd:pmd findbugs:findbugs checkstyle:checkstye package sonar:sonar"
+                        sh "mvn test jdepend:generate  pmd:pmd findbugs:findbugs checkstyle:checkstyle package sonar:sonar"
                     }
                 },
                 
@@ -61,11 +61,11 @@ volumes: [
         stage('Create Docker images') {
       container('docker') {
         withCredentials([[$class: 'UsernamePasswordMultiBinding',
-          credentialsId: 'dockerhub',
-          usernameVariable: 'DOCKER_HUB_USER',
-          passwordVariable: 'DOCKER_HUB_PASSWORD']]) {
+          credentialsId: 'dockerreg',
+          usernameVariable: 'DOCKER_REG_USER',
+          passwordVariable: 'DOCKER_REG_PASSWORD']]) {
           sh """
-            docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
+            docker login -u ${DOCKER_REG_USER} -p ${DOCKER_REG_PASSWORD}
             docker build -t paruff/petclinic:${gitCommit} .
             docker push paruff/petclinic:${gitCommit}
             """
