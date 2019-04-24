@@ -30,10 +30,10 @@ volumes: [
                 stage('Compile project') {
                     sh 'mvn -B  compile'
                 }
-                
+                parallel (
                 stage('Unit Test and coverage project') {
                     sh 'mvn -B  test'
-                }
+                },
                 
 // TODO
 //  sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target               
@@ -43,7 +43,7 @@ volumes: [
 
                stage('Scan components Maven project') {
                    sh 'mvn -B dependency-check:check'
-               }
+               },
             
                 stage 'Package and Code Analysis'
                     withSonarQubeEnv {
@@ -53,6 +53,7 @@ volumes: [
                 stage('Publish test results') {
                     junit 'target/surefire-reports/*.xml'
                 } 
+                )
                 
             }
         }
@@ -98,7 +99,7 @@ def notifySlack(String buildStatus = 'STARTED') {
         color = '#FF9FA1'
     }
 
-    def msg = "${buildStatus}: `${env.JOB_NAME}` #${env.BUILD_NUMBER}:\n${env.BUILD_URL}"
+    def msg = "${buildStatus}: `${env.JOB_NAME}` #${env.BUILD_NUMBER}"
 
     slackSend(color: color, message: msg)
 }
