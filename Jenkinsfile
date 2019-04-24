@@ -40,10 +40,14 @@ volumes: [
 //                stage('Scan components Maven project') {
 //                    sh 'mvn -B -Djavax.net.ssl.trustStore=/path/to/cacerts dependency-check:check'
 //                }
+
+               stage('Scan components Maven project') {
+                   sh 'mvn -B dependency-check:check'
+               }
             
                 stage 'Package and Code Analysis'
                     withSonarQubeEnv {
-                        sh "mvn package sonar:sonar"
+                        sh "mvn test package sonar:sonar"
                     }
                 
                 stage('Publish test results') {
