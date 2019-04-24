@@ -1,6 +1,7 @@
 def label = "mypod-${UUID.randomUUID().toString()}"
 podTemplate(label: label, containers: [
     containerTemplate(name: 'maven', image: 'maven:3.6.0-jdk-8-alpine', ttyEnabled: true, command: 'cat'),
+    containerTemplate(name: 'maven', image: 'maven:3.6.0-jdk-8-alpine', ttyEnabled: true, command: 'cat'),
     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true)
   ],
 volumes: [
@@ -41,13 +42,13 @@ volumes: [
 //                    sh 'mvn -B -Djavax.net.ssl.trustStore=/path/to/cacerts dependency-check:check'
 //                }
 
-               stage('Scan components Maven project') {
+               stage('Security Scan maven components') {
                    sh 'mvn -B dependency-check:check'
                },
             
                 stage ('Package and Code Analysis') {
                     withSonarQubeEnv {
-                        sh "mvn test jdepend:generate  pmd:pmd findbugs:findbugs checkstyle:checkstyle package sonar:sonar"
+                        sh "mvn test jdepend:generate  pmd:pmd findbugs:findbugs checkstyle:checkstyle com.hello2morrow:sonargraph-maven-plugin:dynamic-report -Dsonargraph.sonargraphBuildVersion=newest -Dsonargraph.prepareForSonarQube=true  package sonar:sonar"
                     }
                 },
                 
