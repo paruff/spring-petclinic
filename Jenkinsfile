@@ -45,7 +45,7 @@ volumes: [
                    sh 'mvn -B dependency-check:check'
                },
             
-                stage 'Package and Code Analysis'
+                stage ('Package and Code Analysis')
                     withSonarQubeEnv {
                         sh "mvn test package sonar:sonar"
                     }
