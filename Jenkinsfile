@@ -48,7 +48,7 @@ volumes: [
             
                 stage ('Package and Code Analysis') {
                     withSonarQubeEnv {
-                        sh "mvn test jdepend:generate  pmd:pmd findbugs:findbugs checkstyle:checkstyle com.hello2morrow:sonargraph-maven-plugin:dynamic-report -Dsonargraph.sonargraphBuildVersion=newest -Dsonargraph.prepareForSonarQube=true  package sonar:sonar"
+                        sh "mvn jdepend:generate pmd:pmd findbugs:findbugs checkstyle:checkstyle com.hello2morrow:sonargraph-maven-plugin:dynamic-report -Dsonargraph.sonargraphBuildVersion=newest -Dsonargraph.prepareForSonarQube=true  package sonar:sonar"
                     }
                 },
                 
