@@ -47,7 +47,7 @@ volumes: [
             
                 stage ('Package and Code Analysis') {
                     withSonarQubeEnv {
-                        sh "mvn test package sonar:sonar"
+                        sh "mvn test jdepend:generate  pmd:pmd findbugs:findbugs checkstyle:checkstye package sonar:sonar"
                     }
                 },
                 
