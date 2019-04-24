@@ -23,7 +23,7 @@ volumes: [
             container('maven') {
 
                 stage('Validate project') {
-#                    slackSend (  message: "Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>")
+//                    slackSend (  message: "Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>")
                     sh 'mvn -B  validate'
                 }
                 
