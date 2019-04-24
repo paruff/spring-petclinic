@@ -67,13 +67,14 @@ volumes: [
       }
     }
 
-    }
+    
        // Existing build steps.
     } catch (e) {
         currentBuild.result = 'FAILURE'
         throw e
     } finally {
         notifySlack(currentBuild.result)
+    }
     }
 }
 
