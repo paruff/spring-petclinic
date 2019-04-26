@@ -62,8 +62,9 @@ volumes: [
            passwordVariable: 'DOCKER_REG_PASSWORD']]) {
           sh """
             docker login -u ${DOCKER_REG_USER}  -p ${DOCKER_REG_PASSWORD}
-            docker build -t paruff/petclinic:${gitCommit} .
-            docker push paruff/petclinic:${gitCommit}
+            docker build -t paruff/petclinic:latest .
+            docker tag paruff/petclinic:latest paruff/petclinic:${gitCommitCount}
+            docker push paruff/petclinic:${gitCommitCount}
             """
          }
       }
