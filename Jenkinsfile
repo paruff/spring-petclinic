@@ -71,12 +71,14 @@ volumes: [
             docker build -t ${regNamespace}/${artifactID} .
             docker tag ${regNamespace}/${artifactID} ${regNamespace}/${artifactID}:${POMversion}.${shortGitCommit}
             echo $gitBranch
-            if [ ${gitBranch} == "master" ] ; then
+            branchName = ${gitBranch#"origin/"}
+            echo $branchName
+            if [ ${gitBranch} == "origin/master" ] ; then
                 docker tag ${regNamespace}/${artifactID} ${regNamespace}/${artifactID}:${POMversion}.${gitCommitCount}
                 docker tag ${regNamespace}/${artifactID} ${regNamespace}/${artifactID}:${POMversion}.${BUILD_NUMBER}
             else
-                docker tag ${regNamespace}/${artifactID} ${regNamespace}/${artifactID}:${gitBranch}-${POMversion}.${gitCommitCount}
-                docker tag ${regNamespace}/${artifactID} ${regNamespace}/${artifactID}:${gitBranch}-${POMversion}.${BUILD_NUMBER}
+                docker tag ${regNamespace}/${artifactID} ${regNamespace}/${artifactID}:${branchName}-${POMversion}.${gitCommitCount}
+                docker tag ${regNamespace}/${artifactID} ${regNamespace}/${artifactID}:${branchName}-${POMversion}.${BUILD_NUMBER}
             fi
             docker push ${regNamespace}/${artifactID}
             """
