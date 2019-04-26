@@ -18,7 +18,7 @@ volumes: [
         def shortGitCommit = "${gitCommit[0..10]}"
         def previousGitCommit = sh(script: "git rev-parse ${gitCommit}~", returnStdout: true)
         def gitCommitCount = sh(script: "git rev-list --all --count", returnStdout: true)
-        def version = sh(script: "$(grep --max-count=1 '<version>' <your_path>/pom.xml | awk -F '>' '{ print $2 }' | awk -F '<' '{ print $1 }')", returnStdout: true)
+        def version = sh(script: "grep --max-count=1 '<version>' pom.xml | awk -F '>' '{ print $2 }' | awk -F '<' '{ print $1 }'", returnStdout: true)
     
         // try {
         // notifySlack()
