@@ -70,8 +70,14 @@ volumes: [
             docker login -u ${DOCKER_REG_USER}  -p ${DOCKER_REG_PASSWORD}
             docker build -t ${regNamespace}/${artifactID} .
             docker tag ${regNamespace}/${artifactID} ${regNamespace}/${artifactID}:${POMversion}.${shortGitCommit}
-            docker tag ${regNamespace}/${artifactID} ${regNamespace}/${artifactID}:${POMversion}.${gitCommitCount}
-            docker tag ${regNamespace}/${artifactID} ${regNamespace}/${artifactID}:${POMversion}.${BUILD_NUMBER}
+            echo $gitBranch
+            if [ ${gitBranch} == "master" ] ; then
+                docker tag ${regNamespace}/${artifactID} ${regNamespace}/${artifactID}:${POMversion}.${gitCommitCount}
+                docker tag ${regNamespace}/${artifactID} ${regNamespace}/${artifactID}:${POMversion}.${BUILD_NUMBER}
+            else
+                docker tag ${regNamespace}/${artifactID} ${regNamespace}/${artifactID}:${gitBranch}-${POMversion}.${gitCommitCount}
+                docker tag ${regNamespace}/${artifactID} ${regNamespace}/${artifactID}:${gitBranch}-${POMversion}.${BUILD_NUMBER}
+            fi
             docker push ${regNamespace}/${artifactID}
             """
          }
