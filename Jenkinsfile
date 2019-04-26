@@ -18,8 +18,8 @@ volumes: [
         def shortGitCommit = "${gitCommit[0..10]}"
         def previousGitCommit = sh(script: "git rev-parse ${gitCommit}~", returnStdout: true)
         def gitCommitCount = sh(script: "git rev-list --all --count", returnStdout: true)
-        def version = sh(script: "grep --max-count=1 '<version>' pom.xml | awk -F '>' '{ print \$2 }' | awk -F '<' '{ print \$1 }'", returnStdout: true)
-        def POMversion = sh(script: "grep '<version>' pom.xml | head -n 1 | sed -e 's/version//g' | sed -e 's/\\s*[<>/]*//g' | xargs", returnStdout: true)
+        def artifactID = sh(script: "grep '<artifactId>' pom.xml | head -n 1 | sed -e 's/artifactId//g' | sed -e 's/\\s*[<>/]*//g' | tr -d '\\r'", returnStdout: true)
+        def POMversion = sh(script: "grep '<version>' pom.xml | head -n 1 | sed -e 's/version//g' | sed -e 's/\\s*[<>/]*//g' | tr -d '\\r'", returnStdout: true)
  
         // try {
         // notifySlack()
@@ -66,11 +66,9 @@ volumes: [
            passwordVariable: 'DOCKER_REG_PASSWORD']]) {
           sh """
             docker login -u ${DOCKER_REG_USER}  -p ${DOCKER_REG_PASSWORD}
-            docker build -t paruff/petclinic:latest .
-            docker tag paruff/petclinic:latest paruff/petclinic:${gitCommitCount}
-            docker tag paruff/petclinic:latest paruff/petclinic:${POMversion}.${gitCommitCount}
-
-            docker push paruff/petclinic:${gitCommitCount}
+            docker build -t paruff/${artifactID}:latest .
+            docker tag paruff/petclinic:latest paruff/${artifactID}:${POMversion}.${gitCommitCount}
+            docker push paruff/${artifactID}:${POMversion}.${gitCommitCount}
             """
          }
       }
