@@ -56,12 +56,13 @@ volumes: [
         }
         stage('Create Docker images') {
           container('docker') {
-        // withCredentials([[$class: 'UsernamePasswordMultiBinding',
-        //   credentialsId: 'dockerreg',
-        //   usernameVariable: 'DOCKER_REG_USER',
-        //   passwordVariable: 'DOCKER_REG_PASSWORD']]) {
+         withCredentials([[$class: 'UsernamePasswordMultiBinding',
+           credentialsId: 'dockerreg',
+           usernameVariable: 'DOCKER_REG_USER',
+           passwordVariable: 'DOCKER_REG_PASSWORD']]) {
           sh """
-            docker login ${registy-url} -u ${registry-user} -p ${registry-pw}
+       //#     docker login ${registy-url} -u ${registry-user} -p ${registry-pw}
+            docker login -u ${DOCKER_REG_USER}  -p ${DOCKER_REG_PASSWORD}
             docker build -t paruff/petclinic:${shortGitCommit} .
             docker push paruff/petclinic:${shortGitCommit}
             """
