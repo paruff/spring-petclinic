@@ -71,7 +71,7 @@ volumes: [
             docker build -t ${regNamespace}/${artifactID} .
             docker tag ${regNamespace}/${artifactID} ${regNamespace}/${artifactID}:${POMversion}.${shortGitCommit}
             echo $gitBranch
-            branchName =$( echo $gitBranch | cut -c8-")
+            branchName = \$( echo $gitBranch | cut -c8-")
             echo $branchName
             if [ ${gitBranch} == "origin/master" ] ; then
                 docker tag ${regNamespace}/${artifactID} ${regNamespace}/${artifactID}:${POMversion}.${gitCommitCount}
