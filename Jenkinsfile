@@ -2,7 +2,9 @@ def label = "mypod-${UUID.randomUUID().toString()}"
 podTemplate(label: label, containers: [
     containerTemplate(name: 'maven', image: 'maven:3.6.0-jdk-8-alpine', ttyEnabled: true, command: 'cat'),
     containerTemplate(name: 'maven', image: 'maven:3.6.0-jdk-8-alpine', ttyEnabled: true, command: 'cat'),
-    containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true)
+    containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:v1.8.8', command: 'cat', ttyEnabled: true),
+    containerTemplate(name: 'helm', image: 'lachlanevenson/k8s-helm:latest', command: 'cat', ttyEnabled: true)
   ],
 volumes: [
     hostPathVolume(mountPath: '/root/.m2/repository', hostPath: '/root/.m2/repository'),
@@ -18,6 +20,7 @@ volumes: [
     def gitBranch = myRepo.GIT_BRANCH
     def shortGitCommit = "${gitCommit[0..10]}"
     def previousGitCommit = sh(script: "git rev-parse ${gitCommit}~", returnStdout: true)
+    def GitCommitCount = sh(script: "git rev-list --all --count")
         
         stage('Get a Maven project') {
             checkout scm
