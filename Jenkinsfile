@@ -64,7 +64,7 @@ volumes: [
             docker login -u ${DOCKER_REG_USER}  -p ${DOCKER_REG_PASSWORD}
             docker build -t paruff/petclinic:latest .
             docker tag paruff/petclinic:latest paruff/petclinic:${gitCommitCount}
-            docker push ${registry-namespace}/petclinic:${gitCommitCount}
+            docker push paruff/${POM_ARTIFACTID}:${gitCommitCount}
             """
          }
       }
