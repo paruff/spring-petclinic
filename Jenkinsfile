@@ -24,16 +24,14 @@ volumes: [
         def artifactID = sh(script: "grep '<artifactId>' pom.xml | head -n 1 | sed -e 's/artifactId//g' | sed -e 's/\\s*[<>/]*//g' | tr -d '\\r\\n'", returnStdout: true)
         def POMversion = sh(script: "grep '<version>' pom.xml | head -n 1 | sed -e 's/version//g' | sed -e 's/\\s*[<>/]*//g' | tr -d '\\r\\n'", returnStdout: true)
  
-        // try {
-        // notifySlack()
+        try {
+        notifySlack()
 
         stage('Maven project') {
             container('maven') {
 
                 stage('Validate project') {
-                    sh 'mvn -B  validate'
-             //       def imageid = ${POM_ARTIFACTID} might be able to put it in a script 
-                    
+                    sh 'mvn -B  validate'        
                 }
                 
                 stage('Compile project') {
@@ -92,32 +90,32 @@ volumes: [
     }
 
     
-    // } catch (e) {
-    //     currentBuild.result = 'FAILURE'
-    //     throw e
-    // } finally {
-    //     notifySlack(currentBuild.result)
-    // }
-    // }
+    } catch (e) {
+        currentBuild.result = 'FAILURE'
+        throw e
+    } finally {
+        notifySlack(currentBuild.result)
+    }
+    }
 }
 
-// def notifySlack(String buildStatus = 'STARTED') {
-//     // Build status of null means success.
-//     buildStatus = buildStatus ?: 'SUCCESS'
+def notifySlack(String buildStatus = 'STARTED') {
+    // Build status of null means success.
+    buildStatus = buildStatus ?: 'SUCCESS'
 
-//     def color
+    def color
 
-//     if (buildStatus == 'STARTED') {
-//         color = '#D4DADF'
-//     } else if (buildStatus == 'SUCCESS') {
-//         color = '#BDFFC3'
-//     } else if (buildStatus == 'UNSTABLE') {
-//         color = '#FFFE89'
-//     } else {
-//         color = '#FF9FA1'
-//     }
+    if (buildStatus == 'STARTED') {
+        color = '#D4DADF'
+    } else if (buildStatus == 'SUCCESS') {
+        color = '#BDFFC3'
+    } else if (buildStatus == 'UNSTABLE') {
+        color = '#FFFE89'
+    } else {
+        color = '#FF9FA1'
+    }
 
-//     def msg = "${buildStatus}: `${env.JOB_NAME}` #${env.BUILD_NUMBER}"
+    def msg = "${buildStatus}: `${env.JOB_NAME}` #${env.BUILD_NUMBER}"
 
-//     slackSend(color: color, message: msg)
+    slackSend(color: color, message: msg)
  }
