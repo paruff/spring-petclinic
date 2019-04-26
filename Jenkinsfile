@@ -71,10 +71,8 @@ volumes: [
         //   passwordVariable: 'DOCKER_REG_PASSWORD']]) {
           sh """
             docker login ${registy-url} -u ${registry-user} -p ${registry-pw}
-            docker build -t paruff/${POM_ARTIFACTID}:${POM_VERSION} .
-            docker tag paruff/${POM_ARTIFACTID}:${POM_VERSION} paruff/${POM_ARTIFACTID}:latest
-            docker tag paruff/${POM_ARTIFACTID}:${POM_VERSION} paruff/${POM_ARTIFACTID}:${gitCommit}
-            docker push paruff/${POM_ARTIFACTID}:${POM_VERSION}
+            docker build -t paruff/petclinic:${shortGitCommit} .
+            docker push paruff/petclinic:${shortGitCommit}
             """
         // }
       }
