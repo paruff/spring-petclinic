@@ -67,7 +67,7 @@ volumes: [
           usernameVariable: 'DOCKER_REG_USER',
           passwordVariable: 'DOCKER_REG_PASSWORD']]) {
           sh """
-            docker login -u ${DOCKER_REG_USER} -p ${DOCKER_REG_PASSWORD}
+            docker login ${registy-url} -u ${registry-user} -p ${registry-pw}
             docker build -t paruff/petclinic:${gitCommit} .
             docker push paruff/petclinic:${gitCommit}
             """
