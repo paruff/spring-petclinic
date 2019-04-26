@@ -18,6 +18,7 @@ volumes: [
         def shortGitCommit = "${gitCommit[0..10]}"
         def previousGitCommit = sh(script: "git rev-parse ${gitCommit}~", returnStdout: true)
         def gitCommitCount = sh(script: "git rev-list --all --count", returnStdout: true)
+        def version = sh(script: "$(grep --max-count=1 '<version>' <your_path>/pom.xml | awk -F '>' '{ print $2 }' | awk -F '<' '{ print $1 }')", returnStdout: true)
     
         // try {
         // notifySlack()
@@ -27,7 +28,8 @@ volumes: [
 
                 stage('Validate project') {
                     sh 'mvn -B  validate'
-                    def imageid = ${POM_ARTIFACTID}
+             //       def imageid = ${POM_ARTIFACTID} might be able to put it in a script 
+                    
                 }
                 
                 stage('Compile project') {
