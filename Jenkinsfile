@@ -103,4 +103,4 @@ volumes: [
 //     def msg = "${buildStatus}: `${env.JOB_NAME}` #${env.BUILD_NUMBER}"
 
 //     slackSend(color: color, message: msg)
-// }
+ }
