@@ -19,7 +19,8 @@ volumes: [
         def previousGitCommit = sh(script: "git rev-parse ${gitCommit}~", returnStdout: true)
         def gitCommitCount = sh(script: "git rev-list --all --count", returnStdout: true)
         def version = sh(script: "grep --max-count=1 '<version>' pom.xml | awk -F '>' '{ print \$2 }' | awk -F '<' '{ print \$1 }'", returnStdout: true)
-    
+        def POMversion = sh(script: "cat pom.xml | grep "<version>" | head -n 1 | sed -e "s/version//g" | sed -e "s/\s*[<>/]*//g"", returnStdout: true)
+ 
         // try {
         // notifySlack()
 
@@ -67,7 +68,7 @@ volumes: [
             docker login -u ${DOCKER_REG_USER}  -p ${DOCKER_REG_PASSWORD}
             docker build -t paruff/petclinic:latest .
             docker tag paruff/petclinic:latest paruff/petclinic:${gitCommitCount}
-            docker tag paruff/petclinic:latest paruff/petclinic:${version}.${gitCommitCount}
+            docker tag paruff/petclinic:latest paruff/petclinic:${POMversion}.${gitCommitCount}
 
             docker push paruff/petclinic:${gitCommitCount}
             """
