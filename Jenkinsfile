@@ -27,6 +27,7 @@ volumes: [
 
                 stage('Validate project') {
                     sh 'mvn -B  validate'
+                    def imageid = ${POM_ARTIFACTID}
                 }
                 
                 stage('Compile project') {
@@ -64,7 +65,7 @@ volumes: [
             docker login -u ${DOCKER_REG_USER}  -p ${DOCKER_REG_PASSWORD}
             docker build -t paruff/petclinic:latest .
             docker tag paruff/petclinic:latest paruff/petclinic:${gitCommitCount}
-            docker push paruff/${POM_ARTIFACTID}:${gitCommitCount}
+            docker push paruff/petclinic:${gitCommitCount}
             """
          }
       }
