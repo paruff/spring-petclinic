@@ -19,7 +19,7 @@ volumes: [
         def previousGitCommit = sh(script: "git rev-parse ${gitCommit}~", returnStdout: true)
         def gitCommitCount = sh(script: "git rev-list --all --count", returnStdout: true)
         def version = sh(script: "grep --max-count=1 '<version>' pom.xml | awk -F '>' '{ print \$2 }' | awk -F '<' '{ print \$1 }'", returnStdout: true)
-        def POMversion = sh(script: "grep '<version>' pom.xml | head -n 1 | sed -e 's/version//g' | sed -e 's/\\s*[<>/]*//g'", returnStdout: true)
+        def POMversion = sh(script: "grep '<version>' pom.xml | head -n 1 | sed -e 's/version//g' | sed -e 's/\\s*[<>/]*//g' | xargs", returnStdout: true)
  
         // try {
         // notifySlack()
