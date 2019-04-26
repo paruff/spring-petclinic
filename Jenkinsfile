@@ -34,7 +34,7 @@ volumes: [
                 
                 stage('Unit Test and coverage project') {
                     sh 'mvn -B  test'
-                },
+                }
                 
 // TODO
 //  sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target               
@@ -44,14 +44,14 @@ volumes: [
 
                stage('Security Scan maven components') {
                    sh 'mvn -B dependency-check:check'
-               },
+               }
             
                 stage ('Package and Code Analysis') {
                     withSonarQubeEnv {
                         sh "mvn jdepend:generate pmd:pmd findbugs:findbugs checkstyle:checkstyle   package sonar:sonar"
                         // com.hello2morrow:sonargraph-maven-plugin:dynamic-report -Dsonargraph.sonargraphBuildVersion=newest -Dsonargraph.prepareForSonarQube=true
                     }
-                },
+                }
                 
                 stage('Publish test results') {
                     junit 'target/surefire-reports/*.xml'
