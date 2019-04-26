@@ -61,10 +61,9 @@ volumes: [
            usernameVariable: 'DOCKER_REG_USER',
            passwordVariable: 'DOCKER_REG_PASSWORD']]) {
           sh """
-       //#     docker login ${registy-url} -u ${registry-user} -p ${registry-pw}
             docker login -u ${DOCKER_REG_USER}  -p ${DOCKER_REG_PASSWORD}
-            docker build -t paruff/petclinic:${shortGitCommit} .
-            docker push paruff/petclinic:${shortGitCommit}
+            docker build -t paruff/petclinic:latest .
+            docker push paruff/petclinic:latest
             """
          }
       }
