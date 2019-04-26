@@ -66,7 +66,7 @@ volumes: [
             docker build -t paruff/petclinic:${shortGitCommit} .
             docker push paruff/petclinic:${shortGitCommit}
             """
-        // }
+         }
       }
     }
     stage('Run kubectl') {
