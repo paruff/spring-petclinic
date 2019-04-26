@@ -31,7 +31,7 @@ volumes: [
                 stage('Compile project') {
                     sh 'mvn -B  compile'
                 }
-                parallel (
+                
                 stage('Unit Test and coverage project') {
                     sh 'mvn -B  test'
                 },
@@ -56,7 +56,7 @@ volumes: [
                 stage('Publish test results') {
                     junit 'target/surefire-reports/*.xml'
                 } 
-                )
+                
                 
             }
         }
@@ -68,8 +68,10 @@ volumes: [
           passwordVariable: 'DOCKER_REG_PASSWORD']]) {
           sh """
             docker login ${registy-url} -u ${registry-user} -p ${registry-pw}
-            docker build -t paruff/petclinic:${gitCommit} .
-            docker push paruff/petclinic:${gitCommit}
+            docker build -t paruff/${POM_ARTIFACTID}:${POM_VERSION} .
+            docker tag paruff/${POM_ARTIFACTID}:${POM_VERSION} paruff/${POM_ARTIFACTID}:latest
+            docker tag paruff/${POM_ARTIFACTID}:${POM_VERSION} paruff/${POM_ARTIFACTID}:${gitCommit}
+            docker push paruff/${POM_ARTIFACTID}:${POM_VERSION}
             """
         }
       }
