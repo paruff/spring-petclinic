@@ -62,10 +62,10 @@ volumes: [
         }
         stage('Create Docker images') {
       container('docker') {
-        withCredentials([[$class: 'UsernamePasswordMultiBinding',
-          credentialsId: 'dockerreg',
-          usernameVariable: 'DOCKER_REG_USER',
-          passwordVariable: 'DOCKER_REG_PASSWORD']]) {
+        // withCredentials([[$class: 'UsernamePasswordMultiBinding',
+        //   credentialsId: 'dockerreg',
+        //   usernameVariable: 'DOCKER_REG_USER',
+        //   passwordVariable: 'DOCKER_REG_PASSWORD']]) {
           sh """
             docker login ${registy-url} -u ${registry-user} -p ${registry-pw}
             docker build -t paruff/${POM_ARTIFACTID}:${POM_VERSION} .
@@ -73,7 +73,7 @@ volumes: [
             docker tag paruff/${POM_ARTIFACTID}:${POM_VERSION} paruff/${POM_ARTIFACTID}:${gitCommit}
             docker push paruff/${POM_ARTIFACTID}:${POM_VERSION}
             """
-        }
+        // }
       }
     }
 
