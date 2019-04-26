@@ -68,9 +68,10 @@ volumes: [
            passwordVariable: 'DOCKER_REG_PASSWORD']]) {
           sh """
             docker login -u ${DOCKER_REG_USER}  -p ${DOCKER_REG_PASSWORD}
-            docker build -t 'paruff/${artifactID}' .
-            docker tag paruff/${artifactID} paruff/${artifactID}:${POMversion}.${gitCommitCount}
-            docker push paruff/${artifactID}:${POMversion}.${gitCommitCount}
+            docker build -t ${regNamespace}/${artifactID} .
+            docker tag ${regNamespace}/${artifactID} ${regNamespace}/${artifactID}:${POMversion}.${gitCommitCount}
+            docker tag ${regNamespace}/${artifactID} ${regNamespace}/${artifactID}:${POMversion}.${BUILD_NUMBER}
+            docker push ${regNamespace}/${artifactID}:${POMversion}.${gitCommitCount}
             """
          }
       }
