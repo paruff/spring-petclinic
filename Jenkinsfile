@@ -12,22 +12,20 @@ volumes: [
 ]) {
 
     node(label) {
+        def myRepo = checkout scm
+        def gitCommit = myRepo.GIT_COMMIT
+        def gitBranch = myRepo.GIT_BRANCH
+        def shortGitCommit = "${gitCommit[0..10]}"
+        def previousGitCommit = sh(script: "git rev-parse ${gitCommit}~", returnStdout: true)
+        def gitCommitCount = sh(script: "git rev-list --all --count", returnStdout: true)
+    
         try {
         notifySlack()
 
-        def myRepo = checkout scm
-    def gitCommit = myRepo.GIT_COMMIT
-    def gitBranch = myRepo.GIT_BRANCH
-    def shortGitCommit = "${gitCommit[0..10]}"
-    def previousGitCommit = sh(script: "git rev-parse ${gitCommit}~", returnStdout: true)
-    def GitCommitCount = sh(script: "git rev-list --all --count")
-        
-        stage('Get a Maven project') {
-            checkout scm
+        stage('Maven project') {
             container('maven') {
 
                 stage('Validate project') {
-//                    slackSend (  message: "Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>")
                     sh 'mvn -B  validate'
                 }
                 
@@ -39,12 +37,6 @@ volumes: [
                     sh 'mvn -B  test'
                 }
                 
-// TODO
-//  sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target               
-//                stage('Scan components Maven project') {
-//                    sh 'mvn -B -Djavax.net.ssl.trustStore=/path/to/cacerts dependency-check:check'
-//                }
-
                stage('Security Scan maven components') {
                    sh 'mvn -B dependency-check:check'
                }
@@ -52,7 +44,6 @@ volumes: [
                 stage ('Package and Code Analysis') {
                     withSonarQubeEnv {
                         sh "mvn jdepend:generate pmd:pmd findbugs:findbugs checkstyle:checkstyle   package sonar:sonar"
-                        // com.hello2morrow:sonargraph-maven-plugin:dynamic-report -Dsonargraph.sonargraphBuildVersion=newest -Dsonargraph.prepareForSonarQube=true
                     }
                 }
                 
@@ -64,7 +55,7 @@ volumes: [
             }
         }
         stage('Create Docker images') {
-      container('docker') {
+          container('docker') {
         // withCredentials([[$class: 'UsernamePasswordMultiBinding',
         //   credentialsId: 'dockerreg',
         //   usernameVariable: 'DOCKER_REG_USER',
