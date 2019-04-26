@@ -33,7 +33,7 @@ volumes: [
                 }
                 
                 stage('Compile project') {
-                    sh 'mvn -B  compile'
+                    sh 'mvn -B  compile package'
                 }
                 
             //     stage('Unit Test and coverage project') {
