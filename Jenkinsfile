@@ -19,8 +19,8 @@ volumes: [
         def previousGitCommit = sh(script: "git rev-parse ${gitCommit}~", returnStdout: true)
         def gitCommitCount = sh(script: "git rev-list --all --count", returnStdout: true)
     
-        try {
-        notifySlack()
+        // try {
+        // notifySlack()
 
         stage('Maven project') {
             container('maven') {
@@ -68,16 +68,20 @@ volumes: [
         // }
       }
     }
+    stage('Run kubectl') {
+      container('kubectl') {
+        sh "kubectl get pods"
+      }
+    }
 
     
-       // Existing build steps.
-    } catch (e) {
-        currentBuild.result = 'FAILURE'
-        throw e
-    } finally {
-        notifySlack(currentBuild.result)
-    }
-    }
+    // } catch (e) {
+    //     currentBuild.result = 'FAILURE'
+    //     throw e
+    // } finally {
+    //     notifySlack(currentBuild.result)
+    // }
+    // }
 }
 
 def notifySlack(String buildStatus = 'STARTED') {
