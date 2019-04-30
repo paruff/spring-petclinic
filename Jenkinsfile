@@ -38,23 +38,23 @@ volumes: [
                     sh 'mvn -B  compile package'
                 }
                 
-            //     stage('Unit Test and coverage project') {
-            //         sh 'mvn -B  test'
-            //     }
+                stage('Unit Test and coverage project') {
+                    sh 'mvn -B  test'
+                }
                 
-            //    stage('Security Scan maven components') {
-            //        sh 'mvn -B dependency-check:check'
-            //    }
+               stage('Security Scan maven components') {
+                   sh 'mvn -B dependency-check:check'
+               }
             
-            //     stage ('Package and Code Analysis') {
-            //         withSonarQubeEnv {
-            //             sh "mvn jdepend:generate pmd:pmd findbugs:findbugs checkstyle:checkstyle   package sonar:sonar"
-            //         }
-            //     }
+                stage ('Package and Code Analysis') {
+                    withSonarQubeEnv {
+                        sh "mvn jdepend:generate pmd:pmd findbugs:findbugs checkstyle:checkstyle   package sonar:sonar"
+                    }
+                }
                 
-                // stage('Publish test results') {
-                //     junit 'target/surefire-reports/*.xml'
-                // } 
+                stage('Publish test results') {
+                    junit 'target/surefire-reports/*.xml'
+                } 
                 
                 
             }
