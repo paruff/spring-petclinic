@@ -83,10 +83,12 @@ volumes: [
          }
       }
     }
-    stage('Run kubectl') {
+    stage('deploy 2 k8s') {
       container('kubectl') {
         sh "kubectl get pods"
         sh "kubectl create deployment spring-petclinic --image=paruff/spring-petclinic"
+        sh "kubectl expose deployment spring-petclinic --type=LoadBalancer --port=8080"
+
       }
     }
 
