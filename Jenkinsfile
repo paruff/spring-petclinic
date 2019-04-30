@@ -86,6 +86,7 @@ volumes: [
     stage('Run kubectl') {
       container('kubectl') {
         sh "kubectl get pods"
+        sh "kubectl create deployment spring-petclinic --image=paruff/spring-petclinic"
       }
     }
 
