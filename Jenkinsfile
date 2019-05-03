@@ -1,10 +1,8 @@
 def label = "mypod-${UUID.randomUUID().toString()}"
 podTemplate(label: label, containers: [
     containerTemplate(name: 'maven', image: 'maven:3.6.0-jdk-8-alpine', ttyEnabled: true, command: 'cat'),
-    containerTemplate(name: 'maven', image: 'maven:3.6.0-jdk-8-alpine', ttyEnabled: true, command: 'cat'),
     containerTemplate(name: 'docker', image: 'docker', command: 'cat', ttyEnabled: true),
-    containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:v1.8.8', command: 'cat', ttyEnabled: true),
-    containerTemplate(name: 'helm', image: 'lachlanevenson/k8s-helm:latest', command: 'cat', ttyEnabled: true)
+    containerTemplate(name: 'kubectl', image: 'lachlanevenson/k8s-kubectl:v1.8.8', command: 'cat', ttyEnabled: true)
   ],
 volumes: [
     hostPathVolume(mountPath: '/root/.m2/repository', hostPath: '/root/.m2/repository'),
@@ -94,8 +92,8 @@ volumes: [
     stage('deploy 2 k8s') {
       container('kubectl') {
         sh "kubectl get pods"
-        sh "kubectl create deployment spring-petclinic --image=paruff/spring-petclinic"
-        sh "kubectl expose deployment spring-petclinic --type=LoadBalancer --port=8080"
+        sh "kubectl set image deployments/${artifactID} ${artifactID}=${regNamespace}/${artifactID}:${POMversion}.${gitCommitCount}"
+        sh "kubectl expose deployment ${artifactID} --type=LoadBalancer --port=8080"
 
       }
     }
