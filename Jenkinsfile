@@ -51,6 +51,14 @@ volumes: [
                         sh "mvn jdepend:generate pmd:pmd findbugs:findbugs checkstyle:checkstyle   package sonar:sonar"
                     }
                 }
+                stage("Quality Gate"){
+          timeout(time: 1, unit: 'HOURS') {
+              def qg = waitForQualityGate()
+              if (qg.status != 'OK') {
+                  error "Pipeline aborted due to quality gate failure: ${qg.status}"
+              }
+          }
+      }
                 
                 stage('Publish test results') {
                     junit 'target/surefire-reports/*.xml'
